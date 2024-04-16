@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="redCat">#FFC91C22</color>
+    <color name="blueCat">#FF003E90</color>
+    <color name="pinkCat">#FFED1E79</color>
+    <color name="brownCat">#FFCF7E48</color>
+    <color name="lilacCat">#FF4882CF</color>
+    <color name="yellowCat">#FFF2D352</color>
+</resources>
