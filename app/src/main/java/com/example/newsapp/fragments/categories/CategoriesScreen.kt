@@ -1,6 +1,5 @@
-package com.example.newsapp.fragments
+package com.example.newsapp.fragments.categories
 
-import android.provider.SyncStateContract.Constants
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -24,17 +23,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.newsapp.model.Category
+import com.example.newsapp.model.Constants
 import com.example.newsapp.model.NewsScreen
 import com.example.newsapp.ui.theme.gray4
 
 @Composable
-fun CategoriesFragment(navController: NavHostController) {
+fun CategoriesScreen(vm: CategoriesViewModel= viewModel(), navController: NavHostController) {
     Column {
         Text(
             text = "Pick your category \n" +
@@ -45,7 +45,7 @@ fun CategoriesFragment(navController: NavHostController) {
             modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp)
         )
         Spacer(modifier = Modifier.padding(8.dp))
-        CategoriesList(navController)
+        CategoriesList(vm,navController)
 
     }
 
@@ -55,15 +55,15 @@ fun CategoriesFragment(navController: NavHostController) {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun CategoriesFragmentsPreview() {
-    CategoriesFragment(rememberNavController())
+    CategoriesScreen(viewModel(),rememberNavController())
 }
 
 @Composable
-fun CategoriesList(navController: NavHostController) {
+fun CategoriesList(vm: CategoriesViewModel,navController: NavHostController) {
     LazyVerticalGrid(columns = GridCells.Fixed(2)) {
-        items(com.example.newsapp.model.Constants.categories.size) { position ->
+        items(vm.categories.size) { position ->
             CategoryCard(
-                category = com.example.newsapp.model.Constants.categories.get(position),
+                category = vm.categories.get(position),
                 position, navController = navController
             )
         }
@@ -73,7 +73,7 @@ fun CategoriesList(navController: NavHostController) {
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun CategoriesListPreview() {
-    CategoriesList(rememberNavController())
+    CategoriesList(viewModel(),rememberNavController())
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -115,7 +115,7 @@ fun CategoryCard(category: Category, index: Int, navController: NavHostControlle
 @Composable
 fun CategoryCardPreview() {
     CategoryCard(
-        category = com.example.newsapp.model.Constants.categories.get(0), 0,
+        category = Constants.categories.get(0), 0,
         rememberNavController()
     )
 }
