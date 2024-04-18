@@ -2,8 +2,10 @@ package com.example.newsapp.fragments.categories
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -11,7 +13,9 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -33,10 +37,31 @@ import com.example.newsapp.model.Category
 import com.example.newsapp.model.Constants
 import com.example.newsapp.model.NewsScreen
 import com.example.newsapp.ui.theme.gray4
+import com.example.newsapp.utils.NewsTopAppBar
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
-fun CategoriesScreen(vm: CategoriesViewModel= viewModel(), navController: NavHostController) {
-    Column {
+fun CategoriesScreen(
+    vm: CategoriesViewModel = viewModel(),
+    scope: CoroutineScope,
+    drawerState: DrawerState,
+    navController: NavHostController
+) {
+    Scaffold(topBar = {
+        NewsTopAppBar(
+            shouldDisplaySearchIcon = false,
+            shouldDisplayMenuIcon = true,
+            titleResId = R.string.news_app, scope = scope, drawerState = drawerState
+        ) {
+            scope.launch {
+                drawerState.open()
+            }
+        }
+
+    }) {paddingValues: PaddingValues ->  Column(modifier = Modifier
+        .fillMaxSize()
+        .padding(top = paddingValues.calculateTopPadding())) {
         Text(
             text = stringResource(R.string.pick_your_category_of_interest),
             fontSize = 22.sp,
@@ -45,21 +70,18 @@ fun CategoriesScreen(vm: CategoriesViewModel= viewModel(), navController: NavHos
             modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp)
         )
         Spacer(modifier = Modifier.padding(8.dp))
-        CategoriesList(vm,navController)
+        CategoriesList(vm, navController)
 
-    }
+    } }
+
+
 
 }
 
 
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun CategoriesFragmentsPreview() {
-    CategoriesScreen(viewModel(),rememberNavController())
-}
 
 @Composable
-fun CategoriesList(vm: CategoriesViewModel,navController: NavHostController) {
+fun CategoriesList(vm: CategoriesViewModel, navController: NavHostController) {
     LazyVerticalGrid(columns = GridCells.Fixed(2)) {
         items(vm.categories.size) { position ->
             CategoryCard(
@@ -73,7 +95,7 @@ fun CategoriesList(vm: CategoriesViewModel,navController: NavHostController) {
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun CategoriesListPreview() {
-    CategoriesList(viewModel(),rememberNavController())
+    CategoriesList(viewModel(), rememberNavController())
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -91,7 +113,7 @@ fun CategoryCard(category: Category, index: Int, navController: NavHostControlle
             .padding(8.dp)
             .height(120.dp),
         onClick = {
-             navController.navigate(route = "${NewsScreen().route}/${category.apiId}")
+            navController.navigate(route = "${NewsScreen().route}/${category.apiId}")
         }
     ) {
         Image(

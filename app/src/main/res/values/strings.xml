@@ -18,12 +18,12 @@
     <string name="search_articles" translatable="false">Search Articles</string>
     <string name="search" translatable="false">Search</string>
     <string name="close" translatable="false">Close</string>
-    <string name="settings1" translatable="false">Settings</string>
+    <string name="settings1">Settings</string>
     <string name="language">Language</string>
     <string name="english" translatable="false">English</string>
     <string name="arabic">العربية</string>
     <string name="sports">Sports</string>
     <string name="app_name">NewsApp</string>
-    <string name="of_interest">of interest</string>
+    <string name="of_interest" translatable="false">of interest</string>
     <string name="pick_your_category_of_interest">Pick your category of interest</string>
 </resources>

@@ -96,20 +96,11 @@ fun NewsScreenContent() {
             })
         }) {
         Scaffold(
-            topBar = {
-                // Top App Bar
-                NewsTopAppBar(titleResId = toolbarTitle.intValue) {
-                    scope.launch {
-                        drawerState.open()
-                    }
-                }
-            }, modifier = Modifier
+            modifier = Modifier
                 .fillMaxSize()
         )
         { paddingValues ->
 
-            // FrameLayout -> Categories Fragment -> News Fragment
-            // enum classes & sealed class
             NavHost(
                 navController = navController,
                 startDestination = com.example.newsapp.model.CategoriesScreen().route,
@@ -118,7 +109,10 @@ fun NewsScreenContent() {
                 //              "categories"
                 composable(com.example.newsapp.model.CategoriesScreen().route) {
                     toolbarTitle.intValue = R.string.news_app
-                    CategoriesScreen(vm = CategoriesViewModel(), navController)
+                    CategoriesScreen(
+                        vm = CategoriesViewModel(), scope = scope,
+                        drawerState = drawerState, navController
+                    )
                 }
                 composable(
                     "${com.example.newsapp.model.NewsScreen().route}/{category_id}",
@@ -131,7 +125,8 @@ fun NewsScreenContent() {
                 { navBackStackEntry ->
                     val categoryId = navBackStackEntry.arguments?.getString("category_id")
 
-                    NewsScreen(
+                    NewsScreen(scope = scope,
+                        drawerState = drawerState,
                         category = categoryId ?: "",
                         navHostController = navController,
                         onNewsClick = { title ->
@@ -149,18 +144,21 @@ fun NewsScreenContent() {
 
                 { NavBackStackEntry ->
                     val title = NavBackStackEntry.arguments?.getString("title") ?: ""
-                    NewsDetailsScreen(title = title, titleResId = R.string.news_app)
+                    NewsDetailsScreen(
+                        title = title, titleResId = R.string.news_app, scope = scope,
+                        drawerState = drawerState
+                    )
                 }
                 composable(route = "search") { NavBackStackEntry ->
                     SearchScreen(
                         vm = viewModel(),
-                        onNewsClick = { title :String->
+                        onNewsClick = { title: String ->
                             navController.navigate("newsDetails/$title")
                         }
                     )
                 }
-                composable(route="settings"){
-                    SettingScreen(vm = viewModel())
+                composable(route = "settings") {
+                    SettingScreen(vm = viewModel(),scope, drawerState)
                 }
 
             }

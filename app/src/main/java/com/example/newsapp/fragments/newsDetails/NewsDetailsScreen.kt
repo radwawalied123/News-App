@@ -1,10 +1,10 @@
 package com.example.newsapp.fragments.newsDetails
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,15 +12,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
@@ -35,21 +32,18 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.newsapp.NewsActivity
 import com.example.newsapp.R
-import com.example.newsapp.api.ApiManager
 import com.example.newsapp.api.ArticlesItem
-import com.example.newsapp.api.ArticlesResponse
-import com.example.newsapp.model.Constants
 import com.example.newsapp.ui.theme.gray2
 import com.example.newsapp.utils.NewsCard
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.example.newsapp.utils.NewsTopAppBar
+import kotlinx.coroutines.CoroutineScope
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewsDetailsScreen(
     vm: NewsDetailsViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
-    title: String,
+    title: String, scope: CoroutineScope,
+    drawerState: DrawerState,
     titleResId: Int
 ) {
 
@@ -61,21 +55,29 @@ fun NewsDetailsScreen(
 
 
 
-    vm.newsItem?.let { NewsDetailsContent(it) }
+    Scaffold(topBar = {
+        NewsTopAppBar(
+            shouldDisplaySearchIcon = false,
+            shouldDisplayMenuIcon = false,
+            titleResId = R.string.news, scope = scope,
+            drawerState = drawerState,
+        )
+
+
+
+    }) { paddingValues: PaddingValues ->
+        vm.newsItem?.let { NewsDetailsContent(it,paddingValues) }
+    }
 
 }
 
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun NewsDetailsScreenPreview() {
-    NewsDetailsScreen(viewModel(), "", R.string.news_app)
-}
+
 
 @Composable
-fun NewsDetailsContent(newsitem: ArticlesItem) {
+fun NewsDetailsContent(newsitem: ArticlesItem, paddingValues: PaddingValues) {
     Column(
         modifier = Modifier
-            .padding(10.dp)
+            .padding(paddingValues.calculateTopPadding())
             .paint(
                 painterResource(R.drawable.pattern),
                 contentScale = ContentScale.Crop

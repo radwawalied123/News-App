@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -45,15 +46,17 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.newsapp.NewsActivity
 import com.example.newsapp.R
 import com.example.newsapp.ui.theme.green
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingScreen(vm: SettingViewModel = viewModel()) {
+fun SettingScreen(vm: SettingViewModel = viewModel(), scope: CoroutineScope, drawerState: DrawerState,) {
     Scaffold(topBar = {
-        SettingTopBar {
+        SettingTopBar(scope, drawerState)
 
 
-        }
+
     })
     { paddingValues ->
         paddingValues
@@ -141,12 +144,14 @@ fun SettingScreen(vm: SettingViewModel = viewModel()) {
         }
     }
 }
-
+fun onSideMenuClick(drawerState: DrawerState, scope: CoroutineScope) {
+    scope.launch {
+        drawerState.open()
+    }
+}
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingTopBar(
-    onSideMenuClick: (() -> Unit)? = null,
-) {
+fun SettingTopBar( scope: CoroutineScope, drawerState: DrawerState,) {
     TopAppBar(
         navigationIcon = {
             Image(
@@ -155,9 +160,9 @@ fun SettingTopBar(
                 modifier = Modifier
                     .padding(8.dp)
                     .clickable {
-                        if (onSideMenuClick != null) {
-                            onSideMenuClick()
-                        }
+
+                      onSideMenuClick(drawerState, scope)
+
                     }
             )
         },
@@ -182,14 +187,4 @@ fun SettingTopBar(
     )
 }
 
-@Preview(showSystemUi = true, showBackground = true)
-@Composable
-fun SettingsScreenPreview() {
-    SettingScreen()
-}
 
-@Preview
-@Composable
-fun SettingsToolBarPreview() {
-    SettingTopBar()
-}

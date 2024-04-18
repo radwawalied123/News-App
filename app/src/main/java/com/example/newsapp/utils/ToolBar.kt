@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -21,28 +22,40 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.newsapp.R
 import com.example.newsapp.ui.theme.green
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
+fun onSideMenuClick(drawerState: DrawerState, scope: CoroutineScope) {
+    scope.launch {
+        drawerState.open()
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewsTopAppBar(
     titleResId: Int,
-    onSideMenuClick: (() -> Unit)? = null,
+    titleString: String? = null, scope: CoroutineScope, drawerState: DrawerState,
+    shouldDisplaySearchIcon: Boolean,
+    shouldDisplayMenuIcon: Boolean,
     onSearchClick: (() -> Unit)? = null
 ) {
     TopAppBar(
         navigationIcon = {
-            Image(
-                painter = painterResource(id = R.drawable.icon_feather_menu),
-                contentDescription = "Icon Menu",
-                modifier = Modifier
-                    .padding(8.dp)
-                    .clickable {
-                        if (onSideMenuClick != null) {
-                            onSideMenuClick()
+            if (shouldDisplayMenuIcon)
+                Image(
+                    painter = painterResource(id = R.drawable.icon_feather_menu),
+                    contentDescription = "Icon Menu",
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .clickable {
+
+                            onSideMenuClick(drawerState, scope)
+
                         }
-                    }
-            )
+                )
+
+
         },
         title = {
             Text(
@@ -62,25 +75,22 @@ fun NewsTopAppBar(
                 bottomEnd = 30.dp
             )
         ), actions = {
-            Image(
-                painter = painterResource(id = R.drawable.icon_feather_search),
-                contentDescription = "Icon Search",
-                modifier = Modifier
-                    .padding(8.dp)  .clickable {
-                        if (onSearchClick != null) {
-                            onSearchClick()
+            if (shouldDisplaySearchIcon)
+                Image(
+                    painter = painterResource(id = R.drawable.icon_feather_search),
+                    contentDescription = "Icon Search",
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .clickable {
+                            if (onSearchClick != null) {
+                                onSearchClick()
+                            }
                         }
-                    }
 
-            )
+                )
         }
     )
 }
 
-@Preview
-@Composable
-fun NewsTopAppBarPreveiw() {
-    NewsTopAppBar(R.string.news_app) {
 
-    }
-}
+
