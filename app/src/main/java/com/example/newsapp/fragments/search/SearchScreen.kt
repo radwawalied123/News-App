@@ -42,7 +42,11 @@ import com.example.newsapp.ui.theme.green
 
 
 @Composable
-fun SearchScreen(vm: SearchViewModel = viewModel(), onNewsClick: (String) -> Unit) {
+fun SearchScreen(
+    vm: SearchViewModel = viewModel(),
+    onCloseIconClick: () -> Unit,
+    onNewsClick: (String) -> Unit
+) {
 
     val focusManager = LocalFocusManager.current
 
@@ -117,6 +121,7 @@ fun SearchScreen(vm: SearchViewModel = viewModel(), onNewsClick: (String) -> Uni
                                 } else {
                                     focusManager.clearFocus()
                                     vm.isFocused = false
+                                    onCloseIconClick()
                                 }
 
                             })
@@ -146,19 +151,12 @@ fun SearchScreen(vm: SearchViewModel = viewModel(), onNewsClick: (String) -> Uni
 
         NewsList(
             newsList = vm.newsList
-        ) {title->
-            onNewsClick(title) }
+        ) { title ->
+            onNewsClick(title)
+        }
 
 
     }
 
 }
 
-
-@Preview(showSystemUi = true)
-@Composable
-private fun PreviewSearchScreen() {
-    SearchScreen(vm = viewModel()) {
-
-    }
-}

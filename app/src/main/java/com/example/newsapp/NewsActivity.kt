@@ -154,11 +154,13 @@ fun NewsScreenContent() {
                         vm = viewModel(),
                         onNewsClick = { title: String ->
                             navController.navigate("newsDetails/$title")
-                        }
+
+                        },
+                        onCloseIconClick = { navController.popBackStack() }
                     )
                 }
                 composable(route = "settings") {
-                    SettingScreen(vm = viewModel(),scope, drawerState)
+                    SettingScreen(vm = viewModel(), scope, drawerState)
                 }
 
             }
