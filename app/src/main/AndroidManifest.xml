@@ -10,15 +10,16 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:localeConfig="@xml/local_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NewsApp"
-        tools:targetApi="31">
+        tools:targetApi="33">
         <activity
             android:name=".NewsActivity"
             android:exported="false"
             android:label="@string/title_activity_news"
-            android:theme="@style/Theme.NewsApp" />
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
             android:name=".SplashScreen"
             android:exported="true"
@@ -31,6 +32,14 @@
             </intent-filter>
         </activity>
 
+        <service
+            android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
+            android:enabled="false"
+            android:exported="false">
+            <meta-data
+                android:name="autoStoreLocales"
+                android:value="true" />
+        </service>
     </application>
 
 </manifest>

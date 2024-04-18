@@ -25,7 +25,11 @@ import com.example.newsapp.ui.theme.green
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NewsTopAppBar(titleResId: Int, onSideMenuClick:( () -> Unit)?=null) {
+fun NewsTopAppBar(
+    titleResId: Int,
+    onSideMenuClick: (() -> Unit)? = null,
+    onSearchClick: (() -> Unit)? = null
+) {
     TopAppBar(
         navigationIcon = {
             Image(
@@ -61,7 +65,13 @@ fun NewsTopAppBar(titleResId: Int, onSideMenuClick:( () -> Unit)?=null) {
             Image(
                 painter = painterResource(id = R.drawable.icon_feather_search),
                 contentDescription = "Icon Search",
-                modifier = Modifier.padding(8.dp)
+                modifier = Modifier
+                    .padding(8.dp)  .clickable {
+                        if (onSearchClick != null) {
+                            onSearchClick()
+                        }
+                    }
+
             )
         }
     )

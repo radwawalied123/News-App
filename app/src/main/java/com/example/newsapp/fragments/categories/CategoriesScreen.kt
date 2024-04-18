@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.newsapp.R
 import com.example.newsapp.model.Category
 import com.example.newsapp.model.Constants
 import com.example.newsapp.model.NewsScreen
@@ -37,8 +38,7 @@ import com.example.newsapp.ui.theme.gray4
 fun CategoriesScreen(vm: CategoriesViewModel= viewModel(), navController: NavHostController) {
     Column {
         Text(
-            text = "Pick your category \n" +
-                    "of interest",
+            text = stringResource(R.string.pick_your_category_of_interest),
             fontSize = 22.sp,
             fontWeight = FontWeight.Bold,
             color = gray4,

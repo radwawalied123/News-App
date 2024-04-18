@@ -29,4 +29,10 @@ interface NewsService {
 
     ): Call<ArticlesResponse>
 
+    @GET("everything")
+    fun getSearchedArticles(
+        @Query("q") searchQuery: String = "search",
+        @Query("apiKey") apiKey: String
+    ): Call<ArticlesResponse>
+
 }
